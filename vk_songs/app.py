@@ -39,6 +39,14 @@ class VkSong(object):
         self.url = url
 
 
+class VkAlbum(object):
+    """Helper class that defines an Album object"""
+    def __init__(self, title, album_id, owner_id):
+        self.title = title
+        self.album_id = album_id
+        self.owner_id = owner_id
+
+
 class VkSongs(object):
     """VK-Songs downloads VK audio files"""
     def __init__(self):
@@ -160,10 +168,7 @@ class VkSongs(object):
         albums = self.vk_audio.get_albums(owner_id=owner_id)  # TODO: Generator
         result = []
         for album in albums:
-            print(album)
-            return
-            audio['url'] = audio['url'].split('?', 1)[0]
-            result.append(VkSong(num=audio['id'], artist=audio['artist'], title=audio['title'], url=audio['url']))
+            result.append(VkAlbum(title=album['title'], album_id=album['id'], owner_id=album['owner_id']))
         if len(result) == 0:
             self.logger.error('No albums found')
         return result
@@ -305,7 +310,34 @@ def main():
                 ]
                 answers = prompt(questions, qmark='♫')
                 if answers.get('user').strip() != '':  # TODO: Validate ID
-                    vk_songs.get_albums(int(answers.get('user').strip()))  # TODO: ID Decoding
+                    albums = vk_songs.get_albums(int(answers.get('user').strip()))  # TODO: ID Decoding
+                    if albums and len(albums) > 0:
+                        album_choices = []
+                        questions = [
+                            {
+                                'type': 'checkbox',
+                                'message': 'Select albums to download:',
+                                'name': 'albums',
+                                'choices': album_choices,
+                            },
+                        ]
+                        for album in albums:
+                            album_choices.append(
+                                {
+                                    'name': str(album.album_id) + '_' + str(album.owner_id) + '. ' + album.title,
+                                },
+                            )
+                        answers = prompt(questions, qmark='♫')
+                        selected = answers.get('albums')
+                        # TODO: Download albums
+                        if len(selected) > 1:
+                            pass
+                        elif len(selected) == 1:
+                            pass
+                        # for selection in selected:
+                        #    for song in songs:
+                        #         if song.num == int(selection.split('.')[0]):
+                        #             queue.append(song)
                     break
                 else:
                     vk_songs.logger.error('No user id provided')
@@ -363,17 +395,17 @@ def main():
 
         queue = []
         if songs and len(songs) > 0:
-            choices = []
+            song_choices = []
             questions = [
                 {
                     'type': 'checkbox',
                     'message': 'Select songs to download:',
                     'name': 'songs',
-                    'choices': choices,
+                    'choices': song_choices,
                 },
             ]
             for song in songs:
-                choices.append(
+                song_choices.append(
                     {
                         'name': str(song.num) + '. ' + song.artist + ' - ' + song.title,
                     },
