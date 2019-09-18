@@ -144,6 +144,16 @@ class VkSongs(object):
             self.logger.error('Nothing found')
         return result
 
+    def search_user(self, owner_id, query):
+        search = self.vk_audio.search_user(owner_id=owner_id, q=query)  # TODO: Generator
+        result = []
+        for audio in search:
+            audio['url'] = audio['url'].split('?', 1)[0]
+            result.append(VkSong(num=audio['id'], artist=audio['artist'], title=audio['title'], url=audio['url']))
+        if len(result) == 0:
+            self.logger.error('Nothing found')
+        return result
+
     @staticmethod
     def should_login(dict):
         # TODO: Implement user session caching
@@ -238,11 +248,44 @@ def main():
                 'choices': choices,
             },
         ]
-        answers = prompt(questions, qmark='♫')
+        mode = prompt(questions, qmark='♫')
         print()
 
         songs = []
-        if choices.index(answers.get('mode')) == 3:
+        if choices.index(mode.get('mode')) == 2:
+            while True:
+                questions = [
+                    {
+                        'type': 'input',
+                        'name': 'user',
+                        'message': "Enter user's / community's id:",
+                    },
+                ]
+                answers = prompt(questions, qmark='♫')
+                if answers.get('user').strip() != '':  # TODO: Validate ID
+                    user_id = answers.get('user').strip()
+                    while True:
+                        questions = [
+                            {
+                                'type': 'input',
+                                'name': 'query',
+                                'message': 'Search query:',
+                            },
+                        ]
+                        answers = prompt(questions, qmark='♫')
+                        if answers.get('query').strip() != '':
+                            songs = vk_songs.search_user(owner_id=int(user_id),  # TODO: ID Decoding
+                                                         query=answers.get('query').strip())
+                            break
+                        else:
+                            vk_songs.logger.error('No search query provided')
+                        print()
+                    break
+                else:
+                    vk_songs.logger.error('No user id provided')
+                print()
+
+        if choices.index(mode.get('mode')) == 3:
             while True:
                 questions = [
                     {
