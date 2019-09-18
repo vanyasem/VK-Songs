@@ -191,8 +191,7 @@ def main():
     from PyInquirer import prompt
     from colorama import init
 
-    init(autoreset=True)
-
+    init(autoreset=True, convert=True)
     print_initial()
 
     vk_songs = VkSongs()
@@ -214,6 +213,7 @@ def main():
         answers = prompt(questions, qmark='♫')
         if answers.get('username').strip() == '' or answers.get('password').strip() == '':
             vk_songs.logger.error('No username or password provided')
+            # print('\033[3A', end='')  # TODO: Ditch print_initial
             print()
             continue
         vk_songs.login(answers.get('username').strip(), answers.get('password').strip())
@@ -284,27 +284,22 @@ def main():
                         queue.append(song)
 
         count = 0
-        import sys
+        import time
+        print()
         for song in queue:
-            # TODO: Show live progress
-            # char = ' '
-            # while True:
-            #     if char == ' ':
-            #         char = '♫'
-            #     else:
-            #         char = ' '
-            #     print('\r' + '♫' + Fore.GREEN + ' Downloading tracks [{0}/{1} - {2:.2f}%]:'.format(
-            #         count, len(queue), 100 / len(queue) * count))
             dst = VkSongs.make_dst_dir('./DOWNLOADS/')  # TODO: Configure destination directory
-            sys.stdout.write('\r> {0} - {1}'.format(song.artist, song.title))
+            print('\033[1A\033[2K' + '> {0} - {1}'.format(song.artist, song.title))
+            print('♫' + Fore.GREEN + ' Downloading tracks [{0}/{1} - {2:.2f}%]:'.format(
+                count, len(queue), 100 / len(queue) * count))
             result = vk_songs.download(song, dst)
-            sys.stdout.write('\r' + Fore.GREEN + '√' + Fore.RESET + ' {0} - {1}'.format(song.artist, song.title))
+            print('\033[2A\033[2K' + Fore.GREEN + '√' + Fore.RESET + ' {0} - {1}'.format(song.artist, song.title))
             if not result:
-                sys.stdout.write('\n  > Song already exists')
+                print('\033[2K' + '  > Song already exists')
             count += 1
+            time.sleep(2)
             print()
 
-        print(Fore.GREEN + '√' + Fore.RESET + ' Finished downloading audios')
+        print('\033[1A\033[2K' + Fore.GREEN + '√' + Fore.RESET + ' Finished downloading audios')
         print()
 
 
