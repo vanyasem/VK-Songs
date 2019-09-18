@@ -141,17 +141,39 @@ class VkSongs(object):
             audio['url'] = audio['url'].split('?', 1)[0]
             result.append(VkSong(num=audio['id'], artist=audio['artist'], title=audio['title'], url=audio['url']))
         if len(result) == 0:
-            self.logger.error('Nothing found')
+            self.logger.error('No songs found')
         return result
 
     def search_user(self, owner_id, query):
-        search = self.vk_audio.search_user(owner_id=owner_id, q=query)  # TODO: Generator
+        search = self.vk_audio.search_user(owner_id=owner_id, q=query)
         result = []
         for audio in search:
             audio['url'] = audio['url'].split('?', 1)[0]
             result.append(VkSong(num=audio['id'], artist=audio['artist'], title=audio['title'], url=audio['url']))
         if len(result) == 0:
-            self.logger.error('Nothing found')
+            self.logger.error('No songs found')
+        return result
+
+    def get_albums(self, owner_id):
+        albums = self.vk_audio.get_albums(owner_id=owner_id)  # TODO: Generator
+        result = []
+        for album in albums:
+            print(album)
+            return
+            audio['url'] = audio['url'].split('?', 1)[0]
+            result.append(VkSong(num=audio['id'], artist=audio['artist'], title=audio['title'], url=audio['url']))
+        if len(result) == 0:
+            self.logger.error('No albums found')
+        return result
+
+    def get(self, owner_id=None, album_id=None):
+        songs = self.vk_audio.get(owner_id=owner_id, album_id=album_id)  # TODO: Generator
+        result = []
+        for audio in songs:
+            audio['url'] = audio['url'].split('?', 1)[0]
+            result.append(VkSong(num=audio['id'], artist=audio['artist'], title=audio['title'], url=audio['url']))
+        if len(result) == 0:
+            self.logger.error('No songs found')
         return result
 
     @staticmethod
@@ -252,6 +274,40 @@ def main():
         print()
 
         songs = []
+        if choices.index(mode.get('mode')) == 0:
+            while True:
+                questions = [
+                    {
+                        'type': 'input',
+                        'name': 'user',
+                        'message': "Enter user's / community's id:",
+                    },
+                ]
+                answers = prompt(questions, qmark='♫')
+                if answers.get('user').strip() != '':  # TODO: Validate ID
+                    songs = vk_songs.get(owner_id=int(answers.get('user').strip()))  # TODO: ID Decoding
+                    break
+                else:
+                    vk_songs.logger.error('No user id provided')
+                print()
+
+        if choices.index(mode.get('mode')) == 1:
+            while True:
+                questions = [
+                    {
+                        'type': 'input',
+                        'name': 'user',
+                        'message': "Enter user's / community's id:",
+                    },
+                ]
+                answers = prompt(questions, qmark='♫')
+                if answers.get('user').strip() != '':  # TODO: Validate ID
+                    vk_songs.get_albums(int(answers.get('user').strip()))  # TODO: ID Decoding
+                    break
+                else:
+                    vk_songs.logger.error('No user id provided')
+                print()
+
         if choices.index(mode.get('mode')) == 2:
             while True:
                 questions = [
@@ -327,7 +383,6 @@ def main():
                         queue.append(song)
 
         count = 0
-        import time
         print()
         for song in queue:
             dst = VkSongs.make_dst_dir('./DOWNLOADS/')  # TODO: Configure destination directory
@@ -339,7 +394,6 @@ def main():
             if not result:
                 print('\033[2K' + '  > Song already exists')
             count += 1
-            time.sleep(2)
             print()
 
         print('\033[1A\033[2K' + Fore.GREEN + '√' + Fore.RESET + ' Finished downloading audios')
