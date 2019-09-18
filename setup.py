@@ -28,6 +28,7 @@ requires = [
     'PyInquirer',
     'prompt_toolkit==1.0.14',
     'colorama',
+    'pathvalidate',
 ]
 
 setup(

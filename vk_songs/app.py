@@ -113,8 +113,10 @@ class VkSongs(object):
 
     def download(self, song, save_dir='./'):
         """Downloads the media file"""
+        from pathvalidate import sanitize_filename
         url = song.url
-        base_name = '{0} - {1}.mp3'.format(song.artist, song.title)  # TODO: Configurable file mask
+        base_name = '{0} - {1}.mp3'.format(song.artist.strip(), song.title.strip())  # TODO: Configurable file mask
+        base_name = sanitize_filename(base_name, replacement_text='_')
         file_path = os.path.join(save_dir, base_name)
 
         if not os.path.isfile(file_path):
@@ -285,6 +287,7 @@ def main():
                 ]
                 answers = prompt(questions, qmark='♫')
                 if answers.get('user').strip() != '':  # TODO: Validate ID
+                    # TODO: Add loading here
                     songs = vk_songs.get(owner_id=int(answers.get('user').strip()))  # TODO: ID Decoding
                     break
                 else:
