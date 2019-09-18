@@ -1,0 +1,17 @@
+language: python
+python:
+- '3.5'
+- '3.6'
+- '3.7'
+script: echo NoTests
+install: python setup.py develop
+deploy:
+  skip_cleanup: true
+  skip_existing: true
+  provider: pypi
+  user: vanyasem
+  password:
+    secure: sylKeafX73mBMPQvPKwNfuxiz9fG4qCDVBZBXYQ1/V6frzK28UVIXZOB6rCqMa1plQQjG4rODXIcCTBwBuIPSA6svCSqv/14djbZOVXK1YfSXMeUc46EAqb/6XjW3nfP/fB3Ph37Kod1M+/mZXZErr5gBbdtk1eCeEOg7OFUyTGY0aXx2ODmGb6b/eBX51uNbSy9O+/RRZmtkpsXVMC2wP4CDgh3iT80EIZE9ZpOk4AidYSLfURz5xyoS8lvGJ3bffYq+L91TKWyobt4n/4mvyiXX5dXyGSN2rZ44bogESXy2Pzu4Rrw/cB6AC3eIMNhgtO+FC3O3Nuk8fPeN2xEnqSK/q7oIe1ij7SIX+jjLn9v8jrRFKDr7tY0/rAHTHAbo6t9CcIADcFryr5RnMzAVNZB9LPluYODMewkRIhs0yl0ibyqU2iRMX3DgVGuxMIT0b5AvIL6vJ82nGipnoGJ5RaFwD7F4xeKqX989VhKIkZ+hNkZfhEqvZvOhPgQtGmm4uYzAEpX8pT97BIzVCsJAdMPzvWpApl0YLCxKQUYhXr/NYXyq4jlOPINJ9UIW1ZaWy8X0OFcTOYay2jji0BsHN+KiO0+/IKN8UyIK9FMCYU2kIc9UDBows7mYL17x0wQZjUhy4gt/rQw4yX3Ty1QmcUPxYE9QKkHNmbDktuhoyA=
+  on:
+    tags: true
+    branch: master
