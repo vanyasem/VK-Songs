@@ -58,3 +58,6 @@ Futurelog
 - Session caching
 - User ID decoding
 - Download albums to separate folders
+- AppImage
+- Windows EXE
+- MacOS Build
