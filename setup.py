@@ -36,15 +36,15 @@ requires = [
 
 setup(
     name='VK-Songs',
-    version='0.0.1',
+    version='0.1.0',
     description='',
     url='https://github.com/vanyasem/VK-Songs',
-    download_url='https://github.com/vanyasem/VK-Songs/archive/v0.0.1.tar.gz',
+    download_url='https://github.com/vanyasem/VK-Songs/archive/v0.1.0.tar.gz',
     author='Ivan Semkin',
     author_email='ivan@semkin.ru',
     license='GPL-3.0',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',

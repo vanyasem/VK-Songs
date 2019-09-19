@@ -1,8 +1,8 @@
 VK Songs
 ========
 ![Python 3.5, 3.6, 3.7](https://img.shields.io/pypi/pyversions/vk_songs.svg)
-[![GitHub License](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://raw.githubusercontent.com/vanyasem/VK-Songs/master/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/vk-songs.svg)](https://pypi.python.org/pypi/VK-Songs)
+[![AUR](https://repology.org/badge/version-for-repo/aur/vk-songs.svg)](https://aur.archlinux.org/packages/vk-songs)
 [![Travis](https://img.shields.io/travis/vanyasem/VK-Songs.svg)](https://travis-ci.org/vanyasem/VK-Songs)
 
 vk-songs is a command-line application written in Python that downloads VK audio files. Use responsibly.
