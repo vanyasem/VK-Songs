@@ -29,7 +29,9 @@ requires = [
     'prompt_toolkit==1.0.14',
     'colorama',
     'pathvalidate',
-    'python-magic-bin',
+    'python-magic-bin ; platform_system=="Windows"',
+    'python-magic-bin ; platform_system=="Darwin"',
+    'python-magic ; platform_system=="Linux"',
 ]
 
 setup(
