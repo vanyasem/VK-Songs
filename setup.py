@@ -29,7 +29,6 @@ requires = [
     'prompt_toolkit==1.0.14',
     'colorama',
     'pathvalidate',
-    'git+git://github.com/Sixshaman/eyeD3@master',
     'python-magic-bin',
 ]
 
@@ -57,6 +56,7 @@ setup(
     ],
     packages=find_packages(exclude=['tests']),
     install_requires=requires,
+    dependency_links=['https://github.com/Sixshaman/eyeD3/tarball/master#egg=eyeD3-0.8.11'],
     entry_points={
         'console_scripts': [
             'vk-songs=vk_songs.app:main',
