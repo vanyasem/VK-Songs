@@ -27,7 +27,6 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 requires = [
     'vk_api',
-    'BeautifulSoup4',
     'requests',
     'pyfiglet',
     'PyInquirer',
