@@ -29,6 +29,8 @@ requires = [
     'prompt_toolkit==1.0.14',
     'colorama',
     'pathvalidate',
+    'git+git://github.com/Sixshaman/eyeD3@master',
+    'python-magic-bin',
 ]
 
 setup(

@@ -120,9 +120,11 @@ class VkSongs(object):
 
         return logger
 
-    def download(self, song, save_dir='./'):
+    def download(self, song, save_dir='./', tag=False):
         """Downloads the media file"""
         from pathvalidate import sanitize_filename
+        import eyed3
+        from eyed3.id3 import ID3_V2_4
         url = song.url
         base_name = '{0} - {1}.mp3'.format(song.artist.strip(), song.title.strip())  # TODO: Configurable file mask
         base_name = sanitize_filename(base_name, replacement_text='_')
@@ -141,6 +143,21 @@ class VkSongs(object):
 
             file_time = time.time()
             os.utime(file_path, (file_time, file_time))
+
+            if tag:
+                audio_file = eyed3.load(file_path)
+                eyed3.core.log.disabled = True
+                eyed3.id3.log.disabled = True
+                if audio_file:
+                    if not audio_file.tag:
+                        audio_file.initTag(version=ID3_V2_4)
+                    audio_file.tag.artist = song.artist
+                    audio_file.tag.album_artist = song.artist
+                    audio_file.tag.title = song.title
+                    if song.album is not None:
+                        audio_file.tag.album = song.album
+                    audio_file.tag.save(version=ID3_V2_4, encoding='utf_8')
+
             return True
         else:
             return False
@@ -421,7 +438,7 @@ def main():
             print('\033[1A\033[2K' + '> {0} - {1}'.format(song.artist, song.title))
             print('♫' + Fore.GREEN + ' Downloading tracks [{0}/{1} - {2:.2f}%]:'.format(
                 count, len(queue), 100 / len(queue) * count))
-            result = vk_songs.download(song, dst)
+            result = vk_songs.download(song, dst, tag=True)  # TODO: Configure tag
             print('\033[2A\033[2K' + Fore.GREEN + '√' + Fore.RESET + ' {0} - {1}'.format(song.artist, song.title))
             if not result:
                 print('\033[2K' + '  > Song already exists')

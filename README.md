@@ -52,6 +52,9 @@ Contributing
 
 Futurelog
 ---------
-- ID3 tags
 - Qt5 GUI
 - Embedding how-to
+- Configuration (file mask, log level, destination, ID3 tagging)
+- Session caching
+- User ID decoding
+- Download albums to separate folders
