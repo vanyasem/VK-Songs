@@ -32,11 +32,12 @@ from vk_api.audio import VkAudio
 
 class VkSong(object):
     """Helper class that defines a Song object"""
-    def __init__(self, num, artist, title, url):
+    def __init__(self, num, artist, title, url, album=None):
         self.num = num
         self.artist = artist
         self.title = title
         self.url = url
+        self.album = album
 
 
 class VkAlbum(object):
@@ -173,12 +174,13 @@ class VkSongs(object):
             self.logger.error('No albums found')
         return result
 
-    def get(self, owner_id=None, album_id=None):
+    def get(self, owner_id=None, album_id=None, album_title=None):
         songs = self.vk_audio.get(owner_id=owner_id, album_id=album_id)  # TODO: Generator
         result = []
         for audio in songs:
             audio['url'] = audio['url'].split('?', 1)[0]
-            result.append(VkSong(num=audio['id'], artist=audio['artist'], title=audio['title'], url=audio['url']))
+            result.append(VkSong(num=audio['id'], artist=audio['artist'],
+                                 title=audio['title'], url=audio['url'], album=album_title))
         if len(result) == 0:
             self.logger.error('No songs found')
         return result
@@ -329,15 +331,10 @@ def main():
                             )
                         answers = prompt(questions, qmark='♫')
                         selected = answers.get('albums')
-                        # TODO: Download albums
-                        if len(selected) > 1:
-                            pass
-                        elif len(selected) == 1:
-                            pass
-                        # for selection in selected:
-                        #    for song in songs:
-                        #         if song.num == int(selection.split('.')[0]):
-                        #             queue.append(song)
+                        # TODO: Place albums in separate folders
+                        for selection in selected:
+                            split = selection.split('.')[0].split('_')
+                            songs += vk_songs.get(owner_id=int(split[1]), album_id=int(split[0]))
                     break
                 else:
                     vk_songs.logger.error('No user id provided')
