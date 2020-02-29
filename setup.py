@@ -1,5 +1,5 @@
 ##
-# Copyright (c) 2017 Ivan Semkin.
+# Copyright (c) 2017-2020 Ivan Semkin.
 #
 # This file is part of VK-Songs
 # (see https://github.com/vanyasem/VK-Songs).
